@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 
 const Todo = props => {
 
-   //[current state, handler function]
    const [todoName, setTodoName] = useState('');
-   console.log(inputState)
+   const [todoList, setTodoList] = useState(['Cook a meal']);
 
    const inputChangeHandler = (event) => {
       setTodoName(event.target.value);
    };
+
+
+   const todoAddHandler = () => {
+      setTodoList([...todoList, todoName]);
+   }
 
    return (
       <React.Fragment>
@@ -18,8 +22,10 @@ const Todo = props => {
             onChange={inputChangeHandler}
             value={todoName}
          />
-         <button type="button">Add</button>
-         <ul />
+         <button type="button" onClick={todoAddHandler}>Add</button>
+         <ul>
+            {todoList.map((todo, index) => (<li key={index} >{todo}</li>))}
+         </ul>
       </React.Fragment>
    )
 }
