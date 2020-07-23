@@ -17,11 +17,11 @@ const Todo = props => {
             const todoData = res.data;
             const todos = [];
             for (const key in todoData) {
-               todos.push({ id: key, name: todoData[keyf].nadfgdme })
+               todos.push({ id: key, name: todoData[key].name })
             }
-            // setTodoList(todos);
+             setTodoList(todos); //update state -> re render -> useeffect -> update state -> re render ->......
          });
-   })
+   }, []);
 
    const inputChangeHandler = (event) => {
       // setTodoState({
