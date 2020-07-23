@@ -5,6 +5,7 @@ import Axios from 'axios';
 const Todo = props => {
 
    const [todoName, setTodoName] = useState('');
+   const [submittedTodo, setSubmittedTodo] = useState(null);
    const [todoList, setTodoList] = useState(['Cook a meal']);
    // const [todoState, setTodoState] = useState({ userInput: '', todoList: [] })
 
@@ -46,6 +47,12 @@ const Todo = props => {
       }
    }, []);
 
+   useEffect(() => {
+      if (submittedTodo) {
+         setTodoList(todoList.concat(submittedTodo))
+      }
+   }, [submittedTodo]);
+
    const inputChangeHandler = (event) => {
       // setTodoState({
       //    userInput: event.target.value,
@@ -60,11 +67,19 @@ const Todo = props => {
       //    userInput: todoState.userInput,
       //    todoList: [...todoState.todoList, todoState.userInput]
       // });
-      setTodoList(todoList.concat(todoName));
+
       Axios.post('https://hooks-25f42.firebaseio.com/todos.json', { name: todoName })
          .then(res => {
-            console.log(res);
-         }).catch(err => {
+
+            setTimeout(() => {
+               const todoItem = { id: res.data.name, name: todoName }
+               console.log(res);
+               setSubmittedTodo(todoItem);
+               //setTodoList(todoList.concat(todoItem));
+            }, 3000)
+
+         })
+         .catch(err => {
             console.log(err);
          })
    }
