@@ -5,7 +5,7 @@ import Axios from 'axios';
 const Todo = props => {
 
    const [todoName, setTodoName] = useState('');
-   const [submittedTodo, setSubmittedTodo] = useState(null);
+   // const [submittedTodo, setSubmittedTodo] = useState(null);
    // const [todoList, setTodoList] = useState(['Cook a meal']);
    // const [todoState, setTodoState] = useState({ userInput: '', todoList: [] })
 
@@ -66,11 +66,11 @@ const Todo = props => {
       }
    }, []);
 
-   useEffect(() => {
-      if (submittedTodo) {
-         dispatch({ type: 'ADD', payload: submittedTodo })
-      }
-   }, [submittedTodo]);
+   // useEffect(() => {
+   //    if (submittedTodo) {
+   //       dispatch({ type: 'ADD', payload: submittedTodo })
+   //    }
+   // }, [submittedTodo]);
 
    const inputChangeHandler = (event) => {
       // setTodoState({
@@ -93,7 +93,8 @@ const Todo = props => {
             setTimeout(() => {
                const todoItem = { id: res.data.name, name: todoName }
                console.log(res);
-               setSubmittedTodo(todoItem);
+               // setSubmittedTodo(todoItem);
+               dispatch({ type: 'ADD', payload: todoItem })
                //setTodoList(todoList.concat(todoItem));
             }, 3000)
 
@@ -101,6 +102,15 @@ const Todo = props => {
          .catch(err => {
             console.log(err);
          })
+   }
+
+   const todoRemoveHandler = todoId => {
+      Axios.delete(`https://hooks-25f42.firebaseio.com/todos/${todoId}.json`)
+         .then((res) => {
+            dispatch({ type: 'REMOVE', payload: todoId })
+         })
+         .catch((err) => console.log(err))
+
    }
 
    return (
@@ -113,7 +123,7 @@ const Todo = props => {
          />
          <button type="button" onClick={todoAddHandler}>Add</button>
          <ul>
-            {todoList.map((todo, index) => (<li key={todo.id} >{todo.name}</li>))}
+            {todoList.map((todo, index) => (<li onClick={todoRemoveHandler.bind(this, todo.id)} key={todo.id} >{todo.name}</li>))}
          </ul>
       </React.Fragment>
    )
