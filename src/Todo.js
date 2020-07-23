@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import Axios from 'axios';
 
 
@@ -6,8 +6,24 @@ const Todo = props => {
 
    const [todoName, setTodoName] = useState('');
    const [submittedTodo, setSubmittedTodo] = useState(null);
-   const [todoList, setTodoList] = useState(['Cook a meal']);
+   // const [todoList, setTodoList] = useState(['Cook a meal']);
    // const [todoState, setTodoState] = useState({ userInput: '', todoList: [] })
+
+
+   const todoListReducer = (state, action) => {
+      switch (action.type) {
+         case 'ADD':
+            return state.concat(action.payload);
+         case 'SET':
+            return action.payload;
+         case 'REMOVE':
+            return state.filter((todo) => todo.id !== action.payload);
+         default:
+            return state;
+      }
+   }
+
+   const [todoList, dispatch] = useReducer(todoListReducer, [])
 
 
    //run after render cycle
@@ -22,7 +38,7 @@ const Todo = props => {
             for (const key in todoData) {
                todos.push({ id: key, name: todoData[key].name })
             }
-            setTodoList(todos); //update state -> re render -> useeffect -> update state -> re render ->......
+            dispatch({ type: 'SET', payload: todos }); //update state -> re render -> useeffect -> update state -> re render ->......
          });
       return () => {
          //call this after pre useeffect
@@ -40,6 +56,9 @@ const Todo = props => {
       console.log(event.clientX, event.clientY)
    };
 
+
+
+
    useEffect(() => {
       document.addEventListener('mousemove', mouseMoveHandler);
       return () => {
@@ -49,7 +68,7 @@ const Todo = props => {
 
    useEffect(() => {
       if (submittedTodo) {
-         setTodoList(todoList.concat(submittedTodo))
+         dispatch({ type: 'ADD', payload: submittedTodo })
       }
    }, [submittedTodo]);
 
