@@ -11,6 +11,8 @@ const Todo = props => {
 
    //run after render cycle
    useEffect(() => {
+
+      //didmount didupdate 
       Axios.get('https://hooks-25f42.firebaseio.com/todos.json')
          .then(res => {
             console.log(res)
@@ -19,9 +21,30 @@ const Todo = props => {
             for (const key in todoData) {
                todos.push({ id: key, name: todoData[key].name })
             }
-             setTodoList(todos); //update state -> re render -> useeffect -> update state -> re render ->......
+            setTodoList(todos); //update state -> re render -> useeffect -> update state -> re render ->......
          });
-   }, []);
+      return () => {
+         //call this after pre useeffect
+         console.log('cleanup')
+      }
+   },
+      []
+      //when this function run 
+      //if not [] -> run every render cycle
+      // [] -> mounting 
+      //[todoName] -> run when value changes
+   );
+
+   const mouseMoveHandler = event => {
+      console.log(event.clientX, event.clientY)
+   };
+
+   useEffect(() => {
+      document.addEventListener('mousemove', mouseMoveHandler);
+      return () => {
+         document.removeEventListener('mousemove', mouseMoveHandler);
+      }
+   }, [])
 
    const inputChangeHandler = (event) => {
       // setTodoState({
