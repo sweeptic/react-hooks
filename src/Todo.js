@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import Axios from 'axios';
 
 
 const Todo = props => {
-   const [todoName, setTodoName] = useState('');
+   // const [todoName, setTodoName] = useState('');
+   const todoInputRef = useRef();
 
    const todoListReducer = (state, action) => {
       switch (action.type) {
@@ -39,7 +40,7 @@ const Todo = props => {
          //call this after pre useeffect
          console.log('cleanup')
       }
-   },[]
+   }, []
       //when this function run 
       //if not [] -> run every render cycle
       // [] -> mounting 
@@ -60,12 +61,11 @@ const Todo = props => {
       }
    }, []);
 
-   const inputChangeHandler = (event) => {
-      setTodoName(event.target.value)
-   };
-
-
+ 
    const todoAddHandler = () => {
+
+      const todoName = todoInputRef.current.value;
+
       Axios.post('https://hooks-25f42.firebaseio.com/todos.json', { name: todoName })
          .then(res => {
 
@@ -94,8 +94,7 @@ const Todo = props => {
          <input
             type="text"
             placeholder="Todo"
-            onChange={inputChangeHandler}
-            value={todoName}
+            ref={todoInputRef}
          />
          <button type="button" onClick={todoAddHandler}>Add</button>
          <ul>
