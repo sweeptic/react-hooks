@@ -63,19 +63,7 @@ const Todo = props => {
    };
 
 
-
-
-
-   // useEffect(() => {
-   //    document.addEventListener('mousemove', mouseMoveHandler);
-   //    return () => {
-   //       document.removeEventListener('mousemove', mouseMoveHandler);
-   //    }
-   // }, []);
-
-
    const todoAddHandler = () => {
-
       const todoName = todoInputRef.current.value;
 
       Axios.post('https://hooks-25f42.firebaseio.com/todos.json', { name: todoName })
