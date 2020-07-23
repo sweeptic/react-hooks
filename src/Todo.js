@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useReducer, useRef, useMemo } from 'react';
 import Axios from 'axios';
 import List from './List';
-
+import { useFormInput } from './forms';
 
 const Todo = props => {
    const [inputIsValid, setinputIsValid] = useState(false);
    // const [todoName, setTodoName] = useState('');
-   const todoInputRef = useRef();
+   // const todoInputRef = useRef();
+   const todoInput = useFormInput();
 
    const todoListReducer = (state, action) => {
       switch (action.type) {
@@ -64,7 +65,7 @@ const Todo = props => {
 
 
    const todoAddHandler = () => {
-      const todoName = todoInputRef.current.value;
+      const todoName = todoInput.value;
 
       Axios.post('https://hooks-25f42.firebaseio.com/todos.json', { name: todoName })
          .then(res => {
@@ -94,9 +95,9 @@ const Todo = props => {
          <input
             type="text"
             placeholder="Todo"
-            ref={todoInputRef}
-            onChange={inputValidationHandler}
-            style={{ backgroundColor: inputIsValid ? 'transparent' : 'red' }}
+            onChange={todoInput.onChange}
+            value={todoInput.value}
+            style={{ backgroundColor: todoInput.validity === true ? 'transparent' : 'red' }}
          />
          <button type="button" onClick={todoAddHandler}>Add</button>
          {useMemo(() =>
