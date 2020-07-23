@@ -3,12 +3,7 @@ import Axios from 'axios';
 
 
 const Todo = props => {
-
    const [todoName, setTodoName] = useState('');
-   // const [submittedTodo, setSubmittedTodo] = useState(null);
-   // const [todoList, setTodoList] = useState(['Cook a meal']);
-   // const [todoState, setTodoState] = useState({ userInput: '', todoList: [] })
-
 
    const todoListReducer = (state, action) => {
       switch (action.type) {
@@ -44,8 +39,7 @@ const Todo = props => {
          //call this after pre useeffect
          console.log('cleanup')
       }
-   },
-      []
+   },[]
       //when this function run 
       //if not [] -> run every render cycle
       // [] -> mounting 
@@ -66,36 +60,19 @@ const Todo = props => {
       }
    }, []);
 
-   // useEffect(() => {
-   //    if (submittedTodo) {
-   //       dispatch({ type: 'ADD', payload: submittedTodo })
-   //    }
-   // }, [submittedTodo]);
-
    const inputChangeHandler = (event) => {
-      // setTodoState({
-      //    userInput: event.target.value,
-      //    todoList: todoState.todoList
-      // });
       setTodoName(event.target.value)
    };
 
 
    const todoAddHandler = () => {
-      // setTodoState({
-      //    userInput: todoState.userInput,
-      //    todoList: [...todoState.todoList, todoState.userInput]
-      // });
-
       Axios.post('https://hooks-25f42.firebaseio.com/todos.json', { name: todoName })
          .then(res => {
 
             setTimeout(() => {
                const todoItem = { id: res.data.name, name: todoName }
                console.log(res);
-               // setSubmittedTodo(todoItem);
                dispatch({ type: 'ADD', payload: todoItem })
-               //setTodoList(todoList.concat(todoItem));
             }, 3000)
 
          })
@@ -110,7 +87,6 @@ const Todo = props => {
             dispatch({ type: 'REMOVE', payload: todoId })
          })
          .catch((err) => console.log(err))
-
    }
 
    return (
